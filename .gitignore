@@ -1,0 +1,5 @@
+.DS_Store
+*.pyc
+twisted/plugins/dropin.cache
+dumbserver/treelib
+dumbserver/yaml

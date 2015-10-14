@@ -1,0 +1,84 @@
+Expectation01:
+ description: 'sample expectation'
+ request:
+  method: 'POST'
+  path: '/foo'
+  query:
+   - 'foo=1'
+  headers:
+   - 'Content-Type:application/json'
+  body: 'blah.*'
+ response:
+  status-code: 200
+  body: '1'
+
+Expectation02:
+ description: 'sample expectation'
+ request:
+  method: 'POST'
+  path: '/fo.*'
+  query:
+   - 'foo=.*'
+  headers:
+   - 'Content-Type:text/plain'
+ response:
+  status-code: 200
+  body: '2'
+
+Expectation03:
+ description: 'sample expectation'
+ request:
+  method: 'POST'
+  path: '/fo.*'
+  query:
+   - 'foo=.*'
+ response:
+  status-code: 200
+  body: '3'
+ 
+Expectation04:
+ description: 'sample expectation'
+ request:
+  method: 'POST'
+  path: '/fo.*'
+ response:
+  status-code: 200
+  body: '4'
+
+Expectation05:
+ description: 'sample expectation'
+ request:
+  method: 'POST'
+  path: '/fo.*'
+  headers:
+   - 'Content-Type:text/plain'
+ response:
+  status-code: 200
+  body: '5'
+
+Expectation06:
+ description: 'sample expectation'
+ request:
+  method: 'POST'
+ response:
+  status-code: 200
+  body: '6'
+
+Expectation07:
+ description: 'sample expectation'
+ request:
+  method: 'POST'
+  path: '/foo.*'
+  query:
+   - 'foo=.*'
+  headers:
+   - 'Content-Type:text/plain'
+ response:
+  status-code: 200
+  body: '7'
+ 
+Expectation08:
+ description: 'sample expectation'
+ response:
+  status-code: 200
+  body: '8'
