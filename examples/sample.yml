@@ -81,4 +81,6 @@ Expectation08:
  description: 'sample expectation'
  response:
   status-code: 200
-  body: '8'
+  body: '{"varun":"mulloli"}'
+  headers:
+   - 'Content-Type:application/json'

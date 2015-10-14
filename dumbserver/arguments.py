@@ -23,6 +23,9 @@ def sanitizeConfig(config):
     return filename+":"+port
     
 def parseArguments(configfile, expectations):
+    if not configfile and not expectations:
+        raise ValueError("No expectations specified. Run 'twistd dumbserver --help' for more info about specifying expectations.")
+    
     config = []
     if configfile:
         configfile = getPathForFile(configfile)

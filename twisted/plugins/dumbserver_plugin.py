@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 from zope.interface import implements
 
 from twisted.python.usage import Options
@@ -12,6 +13,7 @@ from twisted.web.server import Site
 
 from dumbserver import expectations as Expectations
 from dumbserver import arguments as Arguments
+from dumbserver import configreader as Reader
 from dumbserver.constants import QUERY_SEPARATOR as query_separator
 from dumbserver.constants import QUERY_DELIMITER as query_delimiter
 from dumbserver.constants import HEADER_SEPARATOR as header_separator
@@ -41,6 +43,19 @@ def deserializeRequest(request):
     body = request.content.getvalue()
     
     return Expectations.Request(port, method, path, query, headers, body)
+
+def constructExpectationTreeFromConfig(configurations):
+    expectations = None
+    for entry in configurations:
+        filename, port = Arguments.getFileNameFromConfig(entry), Arguments.getPortNumberFromConfig(entry)
+        try:
+            contents = Reader.readFileContents(filename)
+        except Exception, e:
+            print "ERROR: "+ str(e)
+            sys.exit(1)
+        else:
+            expectations = Expectations.populateExpectations(expectations, filename, port, contents)
+    return expectations
     
 class DumbServerResource(Resource):
     def __init__(self):
@@ -64,7 +79,7 @@ class DumbServerResource(Resource):
         
         if EXP_HEADERS in generic_response:
             headers = generic_response[EXP_HEADERS]
-            for header in headers.split(header_delimiter):
+            for header in headers:
                 key, value = header.split(header_separator)
                 request.setHeader(key, value)
         
@@ -97,9 +112,13 @@ class DumbserverServiceMaker(object):
 
     def makeService(self, options):
         global configurations, expectations
-        configurations = Arguments.parseArguments(options["configfile"],options["expectations"])
+        try:
+            configurations = Arguments.parseArguments(options["configfile"],options["expectations"])
+        except Exception,e:
+            print "ERROR: " + str(e)
+            sys.exit(1)
         ports = Arguments.getAllPortsFromConfig(configurations)
-        expectations = Expectations.constructExpectationTreeFromConfig(configurations)
+        expectations = constructExpectationTreeFromConfig(configurations)
         
         site = Site(DumbServerResource())
         service = DumbserverMultiService()

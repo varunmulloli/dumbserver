@@ -1,5 +1,6 @@
 .DS_Store
 *.pyc
+twistd.pid
 twisted/plugins/dropin.cache
 dumbserver/treelib
 dumbserver/yaml

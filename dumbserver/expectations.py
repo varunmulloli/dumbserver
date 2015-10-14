@@ -3,8 +3,6 @@
 import re
 
 import treelib_adapter as Tree
-import arguments as Arguments
-import configreader as Reader
 from constants import ROOT, PORT
 from constants import QUERY_DELIMITER as query_delimiter
 from constants import HEADER_DELIMITER as header_delimiter
@@ -109,14 +107,6 @@ def populateExpectations(tree, file_name, port_number, expectations):
         tree = addLeafNodeToTree(tree, response, file_name+":"+port_number+"/"+expectation, parent, EXP_RESPONSE)
     return tree
 
-def constructExpectationTreeFromConfig(configurations):
-    expectations = None
-    for entry in configurations:
-        filename, port = Arguments.getFileNameFromConfig(entry), Arguments.getPortNumberFromConfig(entry)
-        contents = Reader.readFileContents(filename)
-        expectations = populateExpectations(expectations, filename, port, contents)
-    return expectations
-
 def forwardMatchNodes(nodes, value):
     matching_nodes = []
     for node in nodes:
@@ -195,7 +185,7 @@ def getResponseFromExpectations(tree, request):
     print "Response candidates: "+str([getIdForNode(node) for node in leaf_nodes])
     
     if len(leaf_nodes) == 1:
-        print "Returning response: "+str(getIdForNode(leaf_nodes))+" for request - {" + request.toString() + "}"
+        print "Returning response: "+str(getIdForNode(leaf_nodes[0]))+" for request - {" + request.toString() + "}"
         return getTagForNode(leaf_nodes[0])
     elif len(leaf_nodes) < 1:
         raise ValueError("No match found for request - {" + request.toString() + "}")
