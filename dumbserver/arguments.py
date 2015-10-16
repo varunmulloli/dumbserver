@@ -2,9 +2,9 @@
 
 import os
 
-def getPathForFile(filename):
+def getPathForFile(filename, base_path=os.getcwd()):
     if not os.path.isabs(filename):
-        return os.path.join(os.getcwd(), filename)
+        return os.path.join(base_path, filename)
     else:
         return filename
 
@@ -18,8 +18,8 @@ def getPortNumberFromConfig(config):
     else:
         return splitted_line[1]
 
-def sanitizeConfig(config):
-    filename, port = getPathForFile(getFileNameFromConfig(config)), getPortNumberFromConfig(config)
+def sanitizeConfig(config, base_path=os.getcwd()):
+    filename, port = getPathForFile(getFileNameFromConfig(config), base_path), getPortNumberFromConfig(config)
     return filename+":"+port
     
 def parseArguments(configfile, expectations):
@@ -29,16 +29,17 @@ def parseArguments(configfile, expectations):
     config = []
     if configfile:
         configfile = getPathForFile(configfile)
+        configfile_path = os.path.dirname(configfile)
         with open(configfile, "r") as file_contents:
             config_from_file = ",".join(file_contents.read().split())
-        config.extend(config_from_file.split(","))
+        config.extend([sanitizeConfig(config_line, configfile_path) for config_line in config_from_file.split(",")])
     
     if expectations:
         if expectations[len(expectations)-1] == ",":
             expectations = expectations[:-1]
-        config.extend(expectations.split(","))
+        config.extend([sanitizeConfig(config_line) for config_line in expectations.split(",")])
             
-    return map(sanitizeConfig, config)
+    return config
 
 def getAllPortsFromConfig(configurations):
     return [int(getPortNumberFromConfig(entry)) for entry in configurations]

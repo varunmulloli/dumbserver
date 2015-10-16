@@ -6,7 +6,7 @@ import treelib_adapter as Tree
 from constants import ROOT, PORT
 from constants import QUERY_DELIMITER as query_delimiter
 from constants import HEADER_DELIMITER as header_delimiter
-from constants import EXP_REQUEST, EXP_RESPONSE, EXP_METHOD, EXP_PATH, EXP_QUERY, EXP_HEADERS, EXP_BODY
+from constants import EXP_REQUEST, EXP_RESPONSE, EXP_METHOD, EXP_PATH, EXP_QUERY, EXP_HEADERS, EXP_BODY, EXP_STATUS_CODE
 
 class Request:
     def __init__(self, port, method, path, query, headers, body):
@@ -102,7 +102,7 @@ def populateExpectations(tree, file_name, port_number, expectations):
 
         response = expectations.get(expectation).get(EXP_RESPONSE)
         if response is None:
-            response = {"status-code":200}
+            response = {EXP_STATUS_CODE:200}
             
         tree = addLeafNodeToTree(tree, response, file_name+":"+port_number+"/"+expectation, parent, EXP_RESPONSE)
     return tree

@@ -90,8 +90,8 @@ class DumbServerResource(Resource):
 
 class Options(Options):
     optParameters = [
-        ["configfile", "f", None, "The configuration file containing the list of expectation files and corresponding port numbers to which it should run."],
-        ["expectations", "e", None, "Comma separated list of expectation files and corresponding port numbers to which it should run."],
+        ["expectations", "e", None, "Comma separated list of expectation files and corresponding port numbers to which it should run. Example: twistd dumbserver -e /path/to/sample1.yml:8000,/path/to/sample2.yml:8001"],
+        ["configfile", "f", None, "The configuration file containing the list of expectation files and corresponding port numbers to which it should run. See -e on how to specify the expectation and port number."],
     ]
 
 class DumbserverMultiService(MultiService):

@@ -22,14 +22,28 @@ else:
     egg_info.write_toplevel_names = _hacked_write_toplevel_names
 
 setup(name='dumbserver',
-      version='0.4',
+      version='1.0',
       description='Mock several REST services in one go!',
-      url='http://github.com/storborg/funniest',
+      url='https://github.com/varunmulloli/dumbserver',
+      download_url = 'https://github.com/varunmulloli/dumbserver/tarball/1.0'
       author='Varun Mulloli',
       author_email='mulloli@me.com',
       license='MIT',
       packages=['dumbserver','twisted.plugins'],
-      install_requires=['PyYAML','treelib','Twisted']
+      install_requires=['PyYAML','treelib','Twisted'],
+      keywords=['mockserver', 'mock server', 'service', 'http', "REST"],
+      classifiers=[
+          "Development Status :: 3 - Alpha",
+          "Environment :: Web Environment",
+          "Framework :: Twisted",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: MIT License",
+          "Natural Language :: English",
+          "Operating System :: Unix",
+          "Programming Language :: Python :: 2.7",
+          "Topic :: Software Development :: Quality Assurance",
+          "Topic :: Software Development :: Testing"
+      ]
 )
 
 try:
