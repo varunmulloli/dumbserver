@@ -4,3 +4,4 @@ twistd.pid
 twisted/plugins/dropin.cache
 dumbserver/treelib
 dumbserver/yaml
+training

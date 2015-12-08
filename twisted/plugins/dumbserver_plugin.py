@@ -101,6 +101,8 @@ class DumbserverMultiService(MultiService):
     def startService(self):
         global configurations, expectations
         print "Loaded configurations: " + str(configurations)
+        reload(sys)
+        sys.setdefaultencoding('utf8')
         Expectations.display(expectations)
         MultiService.startService(self)
     
@@ -127,3 +129,4 @@ class DumbserverServiceMaker(object):
         return service
 
 dumbserverService = DumbserverServiceMaker()
+

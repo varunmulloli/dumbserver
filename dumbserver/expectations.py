@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-import re
+import re,os
 
 import treelib_adapter as Tree
+import arguments as Arguments
 from constants import ROOT, PORT
 from constants import QUERY_DELIMITER as query_delimiter
 from constants import HEADER_DELIMITER as header_delimiter
@@ -110,7 +111,7 @@ def populateExpectations(tree, file_name, port_number, expectations):
 def forwardMatchNodes(nodes, value):
     matching_nodes = []
     for node in nodes:
-        if re.match('^'+getTagForNode(node)+'$', value):
+        if re.match('^'+getTagForNode(node)+'$', value, re.IGNORECASE):
             matching_nodes.append(node)
     return matching_nodes
 
@@ -123,7 +124,7 @@ def reverseMatchNodes(nodes, value):
         for exp in expected:
             matches = False
             for act in actual:
-                if re.match('^'+exp+'$', act):
+                if re.match('^'+exp+'$', act, re.IGNORECASE):
                     matches = True
                     break
             if matches:
@@ -186,7 +187,16 @@ def getResponseFromExpectations(tree, request):
     
     if len(leaf_nodes) == 1:
         print "Returning response: "+str(getIdForNode(leaf_nodes[0]))+" for request - {" + request.toString() + "}"
-        return getTagForNode(leaf_nodes[0])
+        
+        response = getTagForNode(leaf_nodes[0])
+        responseBody = response[EXP_BODY]
+        if responseBody.endswith('.json'):
+            basePath = os.path.dirname(getIdForNode(leaf_nodes[0]).split(':')[0])
+            responseBody = Arguments.getPathForFile(responseBody,basePath)
+            with open(responseBody, 'r') as response_file:
+                responseBody = response_file.read()
+        response[EXP_BODY] = responseBody
+        return response
     elif len(leaf_nodes) < 1:
         raise ValueError("No match found for request - {" + request.toString() + "}")
     else:
